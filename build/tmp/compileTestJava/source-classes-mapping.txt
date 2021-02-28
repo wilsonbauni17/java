@@ -1,0 +1,12 @@
+ias/GameTestPublic.java
+ ias.GameTestPublic
+ias/DeckTestPublic.java
+ ias.DeckTestPublic
+ias/FactoryTestPublic.java
+ ias.FactoryTestPublic
+ias/End2EndPublic.java
+ ias.End2EndPublic
+ias/TestUtil.java
+ ias.TestUtil
+student/MyTests.java
+ student.MyTests
