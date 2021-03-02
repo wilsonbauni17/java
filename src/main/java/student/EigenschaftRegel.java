@@ -1,10 +1,10 @@
 package student;
 
 public class EigenschaftRegel {
-    public Eigenschaft eigenschaft;
-    public String operation;
-    public String winningName;
-    public String losingName;
+    private Eigenschaft eigenschaft;
+    private String operation;
+    private String winningName;
+    private String losingName;
 
     public EigenschaftRegel ( Eigenschaft eigenschaft, String operation) {
         this.eigenschaft = eigenschaft;
@@ -23,7 +23,6 @@ public class EigenschaftRegel {
 
     public void setEigenschaft( Eigenschaft eigenschaft) {
         this.eigenschaft = eigenschaft;
-
     }
 
     public String getOperation() {

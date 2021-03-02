@@ -3,376 +3,325 @@ package student;
 import ias.Deck;
 import ias.GameException;
 import ias.Game;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class MyGame implements Game{
-	
-	 int LAENGE = 200;
-	 public String name;
 
-    // definierte Karte in der Arraylist speichern
-	ArrayList<Karte> cards = new ArrayList<>(LAENGE); 
+	int LAENGE = 200;
+	public String name;
+
 	// definierte Karte in der Arraylist speichern
-	ArrayList<Karte> karten = new ArrayList<>(LAENGE); 
-    //Arraylist zum Speichern von Property
-	ArrayList<Eigenschaft> properties = new ArrayList<>(LAENGE);
+	List<Karte> cards = new ArrayList<>(LAENGE);
+
+	//Arraylist zum Speichern von Property
+	List<Eigenschaft> properties = new ArrayList<>(LAENGE);
+
+	//Arraylist zum Speichern von Regel für Property
+	List<EigenschaftRegel> regels = new ArrayList<>(LAENGE);
+
+
+
+
+
+	// definierte Karte in der Arraylist speichern
+	List<Karte> karten = new ArrayList<>(LAENGE);
+
 	//Arraylist zum Speichern von Property mit value
-	ArrayList<Eigenschaft> propertyValue = new ArrayList<>(LAENGE);
-	//Arraylist zum Speichern von Regel für Property 
-	ArrayList<EigenschaftRegel> regel = new ArrayList<>(LAENGE);
+	List<Eigenschaft> propertyValue = new ArrayList<>(LAENGE);
 
 	public MyGame(String name){
 		this.name = name;
 	}
 
-@Override
-public void defineCard(String name) throws GameException{
-	if ( name == null || name == "" ) {
-		throw new GameException (" keine valide Eingabe ");
-	}
-	else {
-		for ( Karte card : cards){
-			if ( card.getName() == name ) {
-				throw new GameException (" Die Karte ist schon definiert ");	
-			}
-			else {
-				cards.add (new Karte("name"));
-				return;	
-			}
-		}
-	}		
-}
-
-
-@Override
-public void defineProperty(String name, String type) throws GameException{
-	if ( name == null || name == "" || type == null || type == "" ) {
-		throw new GameException(" keine valide Eingabe ");	
-	}
-	else {
-		if(type != "integer" && type != "string"){
-			throw new GameException(" Der type muss entweder string oder integer sein ");	
-		}		
-		for ( Eigenschaft property : properties ) {
-			if( property.getName() == name ) {
-				throw new GameException("Dieser Eigenschaftsname ist schon vergeben");
-			}
-			else {
-				properties.add (new Eigenschaft("name","type"));
-				return;
-			}
-		}
-	} 			
-}
-
-
-//Methode return der Typ der Property
-public String returnPropertyTyp(String PropertyName){
-	for ( Eigenschaft eigenschaft : properties){
-		if (eigenschaft.getName() == PropertyName){
-			return eigenschaft.getType();
-		}
-	}
-	return "";	
-}
-
-
-//Methode zu prüfen, ob eine Karte eine property hat
-public boolean karteMitEigenschaft ( String cardName, String propertyName ) {
-	for ( Karte card : karten ) {
-		if ( card.getName() == "cardName" &&  card.getEigenschaft().getName() == "propertyName"){
-            return true;
-		}
-	}
-	return false;
-}
-
-
-//Methode gibt eine Eigenschaft zurück
-public Eigenschaft returnEigenschaft (String eigenschaftName ) {
-	for ( Eigenschaft eigenschaft : propertyValue ) {
-		if ( eigenschaft.getName() == eigenschaftName ) {
-			return eigenschaft;
-		}
-	}
-	return null;
-}
-
-
-@Override
-public void setProperty(String cardName, String propertyName, String value) throws GameException{
-	if ( cardName == null || cardName == "" || propertyName == null || propertyName == "" || value == null || value == "") {
-		throw new GameException(" keine valide Eingabe ");	
-	}
-	else {
-		//Exception werfen, falls der selbe cardName mit dem selben propertyName aufgerufen wird
-		if ( karteMitEigenschaft("cardName", "propertyName") ) {
-			throw new GameException( " Diese Kombination wurde schon aufgerufen " );
+	@Override
+	public void defineCard(String name) throws GameException{
+		if ( name == null || name.trim().equals("")) {
+			throw new GameException (" Keine valide Eingabe ");
 		}
 		else {
-			// Exception werfen, falls die Karte noch nicht angelegt wurde
-			if ( !cards.contains(cardName) ) {
-				throw new GameException( " Diese Karte wurde noch nicht angelegt " );		
-			}
-			// Exception werfen falls die Eigenschaft noch nicht angelegt wurde
-			if ( !properties.contains(propertyName) ) {
-				throw new GameException( " Diese Eigenschaft wurde noch nicht angelegt " );	
-			}
-			if ( returnPropertyTyp("PropertyName") != "string" ) {
-				throw new GameException( " Die angegebene Eigenschaft ist nicht vom Typ String " );
-			}
-			else {
-				for ( Eigenschaft eigenschaft : properties ) {
-					if ( eigenschaft.getName() == "propertyName" ) { 
-						propertyValue.add(new Eigenschaft("propertyName","string","value"));
-					}
-				}
-				for ( Karte card : cards ) {
-					if (card.getName() == "cardName") {
-						karten.add( new Karte(cardName,returnEigenschaft(propertyName)) );
-					}
+			for ( Karte card : cards){
+				if ( card.getName().equals(name)) {
+					throw new GameException (" Die Karte ist schon definiert ");
 				}
 			}
-		}	
+			cards.add(new Karte(name));
+		}
 	}
-}
 
-@Override
-public void setProperty(String cardName, String propertyName, int value) throws GameException{
-	if ( cardName == null || cardName == "" || propertyName == null || propertyName == "" ) {
-		throw new GameException(" keine valide Eingabe ");	
-	}
-	else {
-		//Exception werfen, falls der selbe cardName mit dem selben propertyName aufgerufen wird
-		if ( karteMitEigenschaft(cardName, propertyName)){
-			throw new GameException( " Diese Kombination wurde schon aufgerufen " );
+	@Override
+	public void defineProperty(String name, String type) throws GameException{
+		if ( name == null || name.trim().equals("") || type == null || type.trim().equals("") ) {
+			throw new GameException(" keine valide Eingabe ");
 		}
 		else {
-			// Exception werfen, falls die Karte noch nicht angelegt wurde
-			if ( !cards.contains(cardName)  ) {
-				throw new GameException( " Diese Karte wurde noch nicht angelegt " );		
+			if(!type.equals("integer") && !type.equals("string")){
+				throw new GameException(" Der type muss entweder string oder integer sein ");
 			}
-			// Exception werfen falls die Eigentschaft (property) noch nicht angelegt wurde
-			if ( !properties.contains(propertyName) ) {
-				throw new GameException( " Diese Eigentschaft wurde noch nicht angelegt " );	
+			for ( Eigenschaft property : properties ) {
+				if( property.getName().equals(name) ) {
+					throw new GameException("Dieser Eigenschaftsname ist schon vergeben");
+				}
 			}
-			if ( returnPropertyTyp(propertyName) != "integer") {
-				throw new GameException( " Die angegeben Eigentschaft ist nicht vom Typ integer " );
+			properties.add (new Eigenschaft(name, type));
+		}
+	}
+
+	@Override
+	public void setProperty(String cardName, String propertyName, String value) throws GameException{
+		if ( cardName == null || cardName.trim().equals("") || propertyName == null || propertyName.trim().equals("") || value == null || value.trim().equals("")) {
+			throw new GameException(" keine valide Eingabe ");
+		}else{
+			// Get the define card
+			Karte karte = null;
+			for(Karte card: cards){
+				if(card.getName().equals(cardName)){
+					karte = card;
+				}
 			}
-			else {
-				for ( Eigenschaft eigenschaft : properties){
-					if ( eigenschaft.getName() == "propertyName"){
-						propertyValue.add(new Eigenschaft("propertyName","integer","value"));
+			if(karte == null){
+				throw new GameException(" Card does not exists ");
+			}
+
+			// Get the define property
+			Eigenschaft eigenschaft = null;
+			for (Eigenschaft property: properties){
+				if(property.getName().equals(propertyName)){
+					eigenschaft = property;
+				}
+			}
+			if(eigenschaft == null){
+				throw new GameException(" Property does not exists ");
+			}
+
+			// Set the value of the property
+			if(eigenschaft.getType().equals("string")){
+				if(eigenschaft.getStringValue() != null){
+					throw new GameException(" The property has value already ");
+				}else{
+					eigenschaft.setStringValue(value);
+					// Verify that the same card don't have the same property set
+					if(karte.getEigenschaft() != null && karte.getEigenschaft().getName().equals(propertyName)){
+						throw new GameException(" The card already have that property ");
+					}else{
+						karte.setEigenschaft(eigenschaft);
 					}
 				}
-				for ( Karte card : cards) {
-					if (card.getName() == "cardName") {
-						karten.add( new Karte(cardName,returnEigenschaft(propertyName)) );
+			}else{
+				throw new GameException(" The value of the property has to be a string ");
+			}
+		}
+	}
+
+	@Override
+	public void setProperty(String cardName, String propertyName, int value) throws GameException{
+		if ( cardName == null || cardName.trim().equals("") || propertyName == null || propertyName.trim().equals("")) {
+			throw new GameException(" keine valide Eingabe ");
+		}else{
+			// Get the define card
+			Karte karte = null;
+			for(Karte card: cards){
+				if(card.getName().equals(cardName)){
+					karte = card;
+				}
+			}
+			if(karte == null){
+				throw new GameException(" Card does not exists ");
+			}
+
+			// Get the define property
+			Eigenschaft eigenschaft = null;
+			for (Eigenschaft property: properties){
+				if(property.getName().equals(propertyName)){
+					eigenschaft = property;
+				}
+			}
+			if(eigenschaft == null){
+				throw new GameException(" Property does not exists ");
+			}
+
+			// Set the value of the property
+			if(eigenschaft.getType().equals("integer")){
+				eigenschaft.setIntValue(value);
+
+				// Verify that the same card don't have the same property set
+				if(karte.getEigenschaft() != null && karte.getEigenschaft().getName().equals(propertyName)){
+					throw new GameException(" The card already have that property ");
+				}else{
+					karte.setEigenschaft(eigenschaft);
+				}
+			}else{
+				throw new GameException(" The value of the property has to be an integer ");
+			}
+		}
+	}
+
+	@Override
+	public void defineRule(String propertyName, String operation) throws GameException{
+		if ( propertyName == null ||  propertyName.trim().equals("") || operation == null || operation.trim().equals("") ) {
+			throw new GameException(" Keine valide Eingabe ");
+		}else {
+			// Get the property
+			Eigenschaft eigenschaft = null;
+			for(Eigenschaft property: properties){
+				if(property.getName().equals(propertyName))
+					eigenschaft = property;
+			}
+
+			if(eigenschaft == null)
+				throw new GameException(" No property exists with the name " + propertyName);
+
+			if(eigenschaft.getType().equals("integer")){
+
+				// Verify if rule already exists
+				for(EigenschaftRegel eigenschaftRegel: regels){
+					if(eigenschaftRegel.getEigenschaft().getName().trim().equals(propertyName) && eigenschaftRegel.getOperation() != null && eigenschaftRegel.getOperation().equals(operation))
+						throw new GameException(" This property already have an operation ");
+				}
+				if(operation.equals("<") || operation.equals(">")){
+					regels.add(new EigenschaftRegel(eigenschaft, operation));
+				}else {
+					throw new GameException(" Invalid operation character ");
+				}
+			}else{
+				throw new GameException(" This operation is applicable only for integer properties ");
+			}
+		}
+	}
+
+	@Override
+	public void defineRule(String propertyName, String winningName, String losingName) throws GameException{
+		if ( propertyName == null ||  propertyName.trim().equals("") || winningName == null || winningName.trim().equals("") || losingName == null || losingName.trim().equals("") ) {
+			throw new GameException(" Keine valide Eingabe ");
+		}else {
+			// Get the property
+			Eigenschaft eigenschaft = null;
+			for(Eigenschaft property: properties){
+				if(property.getName().equals(propertyName))
+					eigenschaft = property;
+			}
+			if(eigenschaft == null)
+				throw new GameException(" No property exists with the name " + propertyName);
+
+			if(eigenschaft.getType().equals("string")){
+
+				// Verify if rule already exists
+				for(EigenschaftRegel eigenschaftRegel: regels){
+					if(eigenschaftRegel.getEigenschaft().getName().trim().equals(propertyName) && eigenschaftRegel.getWinningName() != null && eigenschaftRegel.getWinningName().trim().equals(winningName) && eigenschaftRegel.getLosingName() != null && eigenschaftRegel.getLosingName().trim().equals(losingName))
+						throw new GameException(" This rule has been defined on this property ");
+				}
+				regels.add(new EigenschaftRegel(eigenschaft, winningName, losingName));
+			}else{
+				throw new GameException(" This operation is applicable only for string properties ");
+			}
+		}
+	}
+
+	@Override
+	public String[] get(String type, String name) throws GameException{
+		if ( type == null ||  type.trim().equals("") || name == null || name.trim().equals("")) {
+			throw new GameException(" keine valide Eingabe ");
+		}else {
+			if ( type.equals("game") || type.equals("card") || type.equals("property") || type.equals("rule") ) {
+				if ( type.equals("card")) {
+					List<String> resultCards = new ArrayList<>();
+					if(name.equals("*")){
+						for(Karte card: cards){
+							resultCards.add(card.getName());
+						}
+					}else{
+						for(Karte card: cards){
+							if(card.getName().equals(name))
+								resultCards.add(card.getName());
+						}
 					}
+					return resultCards.toArray(new String[0]);
+				}else if ( type.equals("property")) {
+					List<String> resultProperties = new ArrayList<>();
+					if(name.equals("*")){
+						for(Eigenschaft property: properties){
+							resultProperties.add(property.getName());
+						}
+					}else{
+						for(Eigenschaft property: properties){
+							if(property.getName().equals(name))
+								resultProperties.add(property.getName());
+						}
+					}
+					return resultProperties.toArray(new String[0]);
+				}else if ( type.equals("rule")) {
+					List<String> resultRules = new ArrayList<>();
+					if(name.equals("*")){
+						for(EigenschaftRegel rule: regels){
+							if(rule.getOperation() != null){
+								resultRules.add(rule.getEigenschaft().getName() + ":" + rule.getOperation());
+							}else{
+								resultRules.add(rule.getEigenschaft().getName() + ":" + rule.getWinningName() + ">" + rule.getLosingName());
+							}
+						}
+					}else{
+						for(EigenschaftRegel rule: regels){
+							String propertyName = name.split(":")[0];
+							String winningName = (name.split(":")[1]).split(">")[0];
+							String losingName = (name.split(":")[1]).split(">")[1];
+							if(rule.getEigenschaft().getName().equals(propertyName) && rule.getWinningName().equals(winningName) && rule.getLosingName().equals(losingName))
+								resultRules.add(name);
+						}
+					}
+					return resultRules.toArray(new String[0]);
+				}else if (type.equals("game")){
+					return new String [] {"Test"};
+				}else{
+					throw new GameException( " The type is not recognized " );
 				}
-			}
-		}
-		
-	}
-}
-
-
-//Methode zum prüfen, ob eine Property von Typ integer eine Regel hat
-public boolean returnRuleOfIntegerProperty (String propertyName){
-	for ( EigenschaftRegel rule : regel) {
-		if ( rule.getEigenschaft().getName() == propertyName ){
-			return true;
-		}
-	}
-	return false;
-}
-
-
-//Methode gibt eine Eigenschaft zurück
-public Eigenschaft returnProperty ( String name ) {
-	for ( Eigenschaft eigenschaft : properties ) {
-		if ( eigenschaft.getName() == name ) {
-			return eigenschaft ;
-		}
-	}
-	return null;
-}
-
-
-@Override
-public void defineRule(String propertyName, String operation) throws GameException{
-	if ( propertyName == null ||  propertyName == "" || operation == null || operation == "" ) {
-		throw new GameException(" keine valide Eingabe ");
-	}
-	else {
-		//exception werfen, falls die property eine Regel schon hat
-		if ( returnRuleOfIntegerProperty("propertyName") ) {
-			throw new GameException( " Es gibt schon eine Regel für diese Eigenschaft ");
-		}
-		//Exception werfen, falls die Eigenschaft noch nicht angelegt ist
-		if ( !properties.contains(propertyName) ) {
-			throw new GameException( " Diese Eigenschaft wurde noch nicht angelegt " );	
-		}	
-		 if ( returnPropertyTyp("propertyName") != "integer") {
-			throw new GameException( " Die angegeben Eigenschaft ist nicht vom Typ integer " );
-		}
-		else {
-			if ( operation == "<" || operation == ">" ) {
-				regel.add(new EigenschaftRegel( returnProperty(propertyName), operation) );
-				return;
 			}
 			else {
-				throw new GameException( " Die Operation muss entweder > oder < sein! " );
+				throw new GameException( " falscher type! " );
 			}
-		}	
-	}	
-}
-
-
-//Methode zum prüfen, ob eine Property von Typ String eine Regel hat
-public boolean returnRuleOfStringProperty (String propertyName, String winningName, String losingName){
-	for ( EigenschaftRegel rule : regel) {
-		if ( rule.getEigenschaft().getName() == propertyName && rule.getWinningName() == winningName && rule.getLosingName() == losingName){
-			return true;
 		}
 	}
-	return false;
-}
 
-@Override
-public void defineRule(String propertyName, String winningName, String losingName) throws GameException{
-	if ( propertyName == null ||  propertyName == "" || winningName == null || winningName == "" || losingName == null || losingName == "" ) {
-		throw new GameException(" keine valide Eingabe ");	
+	@Override
+	public void saveToFile(String path) throws GameException{
+		// TODO: A completer
+		try {
+			File file = new File(path);
+			if(file.createNewFile()){
+				FileWriter fw = new FileWriter(file);
+				fw.write("Game: Test \n");
+				fw.close();
+			}else{
+				throw new GameException(" Game file already exists ");
+			}
+		} catch (IOException e) {
+			throw new GameException(" File not found ");
+		}
 	}
-	else {
-		//exception werfen, falls die property eine Regel schon hat
-		if ( returnRuleOfStringProperty(propertyName, winningName, losingName) ) {
-			throw new GameException( " doppelte identische Regel nicht erlaubt " );
-		}
-		//Exception werfen, falls die Eigenschaft noch nicht angelegt ist
-		if ( !properties.contains(propertyName) ) {
-			throw new GameException( " Diese Eigentschaft wurde noch nicht angelegt " );	
-		}
-		if ( returnPropertyTyp(propertyName) == "string") {
-			if ( winningName != losingName) {
-				regel.add(new EigenschaftRegel(returnProperty(propertyName), winningName, losingName));
-				return;
-			}
-			else {
-				throw new GameException( " Die Parameter winningName und losingName dürfen nicht gleich sein " );	
-			}
-		}
-		else {
-			throw new GameException( " Diese Eigenschaft ist nicht von Typ String " );	
-		}
-	}						
-}
 
-//Methode gibt die Operation der Property von Typ integer zurück
-public String returnOperation ( String name) {
-	for ( EigenschaftRegel rule : regel) {
+	@Override
+	public Deck createDeck(){
+		// TODO
+		return null;
 	}
-	return name;
-}
 
+	public static Game loadGame(String path) throws GameException {
 
-@Override
-public String[] get(String type, String name) throws GameException{
-	if ( type == null ||  type == "" || name == null || name == "" ) {
-		throw new GameException(" keine valide Eingabe ");	
+		return new MyGame(path) {
+			@Override
+			public void saveToFile(String path) throws GameException {
+
+			}
+
+			@Override
+			public Deck createDeck() {
+				return null;
+			}
+		};
 	}
-	else {
-
-	}
-	if ( type == "game" || type == "card" || type == "property" || type == "rule" ) {
-		if ( type == "card" ) {
-			if ( cards.contains(name) ) {
-				String [] s = new String[1];
-				s[0] = "name";
-				return s;
-			}
-			 if (!cards.contains(name) && name != "*") {
-				 String [] s = new String[1];
-				 return s;
-			}
-			if ( name == "*") {
-				String [] s = new String [LAENGE];
-				int i = 0;
-				for ( Karte card : cards) {
-					s[i] = card.getName();
-					i++;
-				}
-				return s;
-			}	 
-		}
-		if ( type == "property" ) {
-			if ( properties.contains(name) ) {
-				String [] s = new String[1];
-				s[0] = "name";
-				return s;
-			}
-			 if (!properties.contains(name) && name != "*") {
-			 	String[] s = new String[0];
-				return s;
-			}	
-			if ( name == "*") {
-				String [] s = new String [LAENGE];
-				int i = 0;
-				for ( Eigenschaft property : properties) {
-					s[i] = property.getName();
-					i++;
-				}
-				return s;
-			}	 
-		}
-
-		if ( type == "rule" ) {
-			if ( regel.contains(name) && returnPropertyTyp(name) == "integer" ) {
-				String [] s = new String[1];
-				return s;
-			}
-			if ( name == "*") {
-				String[] array = new String[LAENGE];
-				for ( int i = 0; i < LAENGE; i++ ){
-					if ( regel.get(i) != null ) {
-						String s = regel.get(i).toString();;
-					}		 
-				}
-				return array;
-			}
-			 
-		}
-
-
-
-
-
-
-
-	}
-	else {
-		throw new GameException( " falscher type! " );	
-	}
-	return new String[0];
-}
-
-public static Game loadGame(String path) throws GameException {
-
-	return new MyGame(path) {
-		@Override
-		public void saveToFile(String path) throws GameException {
-
-		}
-
-		@Override
-		public Deck createDeck() {
-			return null;
-		}
-	};
-}
-
-
-
 }
 
 

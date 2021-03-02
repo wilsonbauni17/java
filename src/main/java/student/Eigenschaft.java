@@ -1,28 +1,26 @@
 package student;
 
 public class Eigenschaft {
-    public String name;
-    public String type;
-    public String value1;
-    public int value2;
-   
-    
+    private String name;
+    private String type;
+    private String stringValue;
+    private int intValue;
 
-    public Eigenschaft ( String name, String type ) {
+    public Eigenschaft (String name, String type) {
         this.name = name;
         this.type = type;
     }
 
-    public Eigenschaft ( String name, String type, String value1 ) {
+    public Eigenschaft (String name, String type, String stringValue) {
         this.name = name;
         this.type = type;
-        this.value1 = value1;
+        this.stringValue = stringValue;
     }
 
-    public Eigenschaft ( String name, String type, int value2 ) {
+    public Eigenschaft (String name, String type, int intValue) {
         this.name = name;
         this.type = type;
-        this.value2 = value2;
+        this.intValue = intValue;
     }
     
     public String getName() {
@@ -41,24 +39,21 @@ public class Eigenschaft {
         this.type = type;
     }
 
-    public String getValue1() {
-        return this.value1;
+    public String getStringValue() {
+        return stringValue;
     }
 
-    public void setValue1(String value1) {
-        this.value1 = value1;
-    }
-    
-    public int getValue2() {
-        return this.value2;
+    public void setStringValue(String stringValue) {
+        this.stringValue = stringValue;
     }
 
-    public void setValue2( int value2 ) {
-        this.value2 = value2;
+    public int getIntValue() {
+        return intValue;
     }
-    
 
-    
+    public void setIntValue(int intValue) {
+        this.intValue = intValue;
+    }
 
     public String toString(){
         return "[" + this.name + "]";

@@ -1,12 +1,12 @@
-ias/GameTestPublic.java
- ias.GameTestPublic
-ias/DeckTestPublic.java
- ias.DeckTestPublic
-ias/FactoryTestPublic.java
- ias.FactoryTestPublic
-ias/End2EndPublic.java
- ias.End2EndPublic
 ias/TestUtil.java
  ias.TestUtil
+ias/GameTestPublic.java
+ ias.GameTestPublic
+ias/FactoryTestPublic.java
+ ias.FactoryTestPublic
+ias/DeckTestPublic.java
+ ias.DeckTestPublic
+ias/End2EndPublic.java
+ ias.End2EndPublic
 student/MyTests.java
  student.MyTests
