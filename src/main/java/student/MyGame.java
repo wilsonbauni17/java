@@ -1,3 +1,7 @@
+/**
+ * Class description
+ */
+
 package student;
 
 import ias.Deck;
@@ -10,29 +14,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class MyGame implements Game{
+public class MyGame implements Game{
 
 	int LAENGE = 200;
-	public String name;
+	private String name;
 
 	// definierte Karte in der Arraylist speichern
-	List<Karte> cards = new ArrayList<>(LAENGE);
+	private List<Karte> cards = new ArrayList<>(LAENGE);
 
 	//Arraylist zum Speichern von Property
-	List<Eigenschaft> properties = new ArrayList<>(LAENGE);
+	private List<Eigenschaft> properties = new ArrayList<>(LAENGE);
 
 	//Arraylist zum Speichern von Regel für Property
-	List<EigenschaftRegel> regels = new ArrayList<>(LAENGE);
+	private List<EigenschaftRegel> regels = new ArrayList<>(LAENGE);
 
-
-
-
-
-	// definierte Karte in der Arraylist speichern
-	List<Karte> karten = new ArrayList<>(LAENGE);
-
-	//Arraylist zum Speichern von Property mit value
-	List<Eigenschaft> propertyValue = new ArrayList<>(LAENGE);
 
 	public MyGame(String name){
 		this.name = name;
@@ -287,40 +282,75 @@ public abstract class MyGame implements Game{
 
 	@Override
 	public void saveToFile(String path) throws GameException{
-		// TODO: A completer
-		try {
-			File file = new File(path);
-			if(file.createNewFile()){
-				FileWriter fw = new FileWriter(file);
-				fw.write("Game: Test \n");
-				fw.close();
-			}else{
-				throw new GameException(" Game file already exists ");
-			}
-		} catch (IOException e) {
-			throw new GameException(" File not found ");
-		}
+		// TODO: Save game to file
+//		try {
+//			File file = new File(path);
+//			if(file.createNewFile()){
+//				FileWriter fw = new FileWriter(file);
+//				// Write the first line
+//				fw.write("Game: Magic \n");
+//
+//				// For each card, write it's informations
+//				for(Karte card: cards){
+//					fw.write("Card: " + card.getName() + "\n");
+//					for(Eigenschaft property: properties){
+//						// TODO
+//					}
+//				}
+//				fw.close();
+//			}else{
+//				throw new GameException(" Game file already exists ");
+//			}
+//		} catch (IOException e) {
+//			throw new GameException(" File not found ");
+//		}
 	}
 
 	@Override
 	public Deck createDeck(){
-		// TODO
-		return null;
+		return new MyDeck(this);
+	}
+
+	public Game createGame(String name){
+		return new MyGame(name);
 	}
 
 	public static Game loadGame(String path) throws GameException {
+		// TODO: Read game informations from path
+		return new MyGame("Test");
+	}
 
-		return new MyGame(path) {
-			@Override
-			public void saveToFile(String path) throws GameException {
 
-			}
+	public String getName() {
+		return name;
+	}
 
-			@Override
-			public Deck createDeck() {
-				return null;
-			}
-		};
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<Karte> getCards() {
+		return cards;
+	}
+
+	public void setCards(List<Karte> cards) {
+		this.cards = cards;
+	}
+
+	public List<Eigenschaft> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(List<Eigenschaft> properties) {
+		this.properties = properties;
+	}
+
+	public List<EigenschaftRegel> getRegels() {
+		return regels;
+	}
+
+	public void setRegels(List<EigenschaftRegel> regels) {
+		this.regels = regels;
 	}
 }
 

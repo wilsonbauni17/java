@@ -2,29 +2,20 @@ student/Main.java
  student.Main
 ias/Game.java
  ias.Game
-student/DeckImplementierung.java
- student.DeckImplementierung
-student/MyDeck.java
- student.MyDeck
 ias/GameException.java
  ias.GameException
 ias/Deck.java
  ias.Deck
-student/StringEigenschaft.java
- student.StringEigenschaft
-student/IntegerEigenschaft.java
- student.IntegerEigenschaft
-student/StringRegel.java
- student.StringRegel
 student/Eigenschaft.java
  student.Eigenschaft
-student/Karte.java
- student.Karte
-student/EigenschaftRegel.java
- student.EigenschaftRegel
 ias/Factory.java
  ias.Factory
  ias.Factory$1
+student/EigenschaftRegel.java
+ student.EigenschaftRegel
 student/MyGame.java
  student.MyGame
- student.MyGame$1
+student/MyDeck.java
+ student.MyDeck
+student/Karte.java
+ student.Karte

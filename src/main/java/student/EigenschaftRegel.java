@@ -1,3 +1,7 @@
+/**
+ * Class description
+ */
+
 package student;
 
 public class EigenschaftRegel {
